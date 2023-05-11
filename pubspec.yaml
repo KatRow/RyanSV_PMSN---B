@@ -46,6 +46,8 @@ dependencies:
   firebase_auth: ^4.3.0
   cloud_firestore: ^4.5.0
   image_picker: ^0.8.7+4
+  flutter_responsive_screen: ^1.0.0
+  flutter_screenutil: ^5.7.0
 
 dev_dependencies:
   flutter_test:

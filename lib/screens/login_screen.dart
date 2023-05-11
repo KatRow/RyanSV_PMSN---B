@@ -1,74 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:pmsnb1/widgets/loading_modal_widget.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-
-    final txtEmail = TextFormField(
-      decoration: const InputDecoration(
-        label: Text('Email User'),
-        enabledBorder: OutlineInputBorder()
-      ),
-    );
-
-    final txtPass = TextFormField(
-      obscureText: true,
-      decoration: const InputDecoration(
-        label: Text('Password User'),
-        enabledBorder: OutlineInputBorder()
-      ),
-    );
-
-    final spaceHorizontal = SizedBox(height: 15,);
-
-    final btnLogin = SocialLoginButton(
-      buttonType: SocialLoginButtonType.generalLogin, 
-      onPressed: (){
-        isLoading = true;
-        setState(() {});
-        Future.delayed(Duration(milliseconds: 4000)).then((value){
-          isLoading = false;
-          setState(() {});
-          Navigator.pushNamed(context,'/dash');
-        });
-      }
-    );
-
-    final btnGoogle = SocialLoginButton(
-      buttonType: SocialLoginButtonType.google, 
-      onPressed: (){}
-    );
-
-    final btnFacebook = SocialLoginButton(
-      buttonType: SocialLoginButtonType.facebook, 
-      onPressed: (){}
-    );
-
-    final txtRegister = Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: TextButton(
-        onPressed: (){
-          Navigator.pushNamed(context, '/register');
-        }, 
-        child: const Text('Crear cuenta :)', 
-          style: TextStyle(
-            fontSize: 18,
-            decoration: TextDecoration.underline)
-        )
-      ),
-    );
+    final textScaleFactor = MediaQuery.of(context).textScaleFactor;
+    ScreenUtil.init(context, designSize: const Size(360, 640));
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -76,45 +24,92 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Container(
             constraints: BoxConstraints.expand(),
-            decoration: const BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/fondo_itcelaya.jpeg'),
-                opacity: .4, 
-                fit: BoxFit.cover)
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/fondo_itcelaya.jpeg'),
+                opacity: .4,
+                fit: BoxFit.cover,
+              ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      txtEmail,
-                      spaceHorizontal,
-                      txtPass,
-                      spaceHorizontal,
-                      btnLogin,
-                      spaceHorizontal,
-                      const Text('or'),
-                      spaceHorizontal,
-                      btnGoogle,
-                      spaceHorizontal,
-                      btnFacebook,
-                      spaceHorizontal,
-                      txtRegister
-                    ],
-                  ),
-                  Positioned(
-                    top: 30,
-                    child: Image.asset('assets/logo_itc.png', 
-                      height: 250,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(8.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Positioned(
+                      top: 30.h,
+                      child: Image.asset(
+                        'assets/logo_itc.png',
+                        height: 250.h,
+                      ),
                     ),
-                  )
-                ],
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Email User',
+                        enabledBorder: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 15.h),
+                    TextFormField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Password User',
+                        enabledBorder: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 15.h),
+                    SocialLoginButton(
+                      buttonType: SocialLoginButtonType.generalLogin,
+                      onPressed: () {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        Future.delayed(Duration(milliseconds: 4000)).then(
+                          (value) {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            Navigator.pushNamed(context, '/dash');
+                          },
+                        );
+                      },
+                    ),
+                    SizedBox(height: 15.h),
+                    const Text('or'),
+                    SizedBox(height: 15.h),
+                    SocialLoginButton(
+                      buttonType: SocialLoginButtonType.google,
+                      onPressed: () {},
+                    ),
+                    SizedBox(height: 15.h),
+                    SocialLoginButton(
+                      buttonType: SocialLoginButtonType.facebook,
+                      onPressed: () {},
+                    ),
+                    SizedBox(height: 15.h),
+                    Padding(
+                      padding: EdgeInsets.all(20.w),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/register');
+                        },
+                        child: Text(
+                          'Crear cuenta :)',
+                          style: TextStyle(
+                            fontSize: 18.sp / textScaleFactor,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15.h), // Espacio adicional al final
+                  ],
+                ),
               ),
             ),
           ),
-          isLoading ? const LoadingModalWidget() : Container()
+          isLoading ? const LoadingModalWidget() : SizedBox.shrink(),
         ],
       ),
     );
